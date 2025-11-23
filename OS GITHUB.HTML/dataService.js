@@ -12,7 +12,7 @@
 
   // Public API surface
   const dataService = {
-    subscribe,
+    subscribe, 
     unsubscribe,
     start,
     stop,

@@ -413,7 +413,7 @@ window.addEventListener('DOMContentLoaded', () => {
         toggleServiceBtn.setAttribute('aria-pressed', 'true');
       } else {
         // restart service
-        dataService.start();
+        dataService.start(); 
         toggleServiceBtn.textContent = 'Stop Data';
         toggleServiceBtn.setAttribute('aria-pressed', 'false');
         // allow next onData to set Online status; show Connecting meanwhile
