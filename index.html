@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Real-Time Process Monitoring Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <span class="brand-icon">🖥️</span>
+      <span class="brand-name">Real-Time Process Monitor</span>
+    </div>
+
+    <div class="status-wrap">
+      <div class="status" id="statusChip" aria-live="polite" data-online="false">Status: Connecting...</div>
+      <button id="toggleStatus" class="btn-small" aria-pressed="false">Toggle Offline</button>
+
+      <!-- THEME TOGGLE BUTTON -->
+      <button id="themeToggle" class="btn-small" aria-pressed="false">Dark Mode</button>
+
+      <!-- NEW: data ON/OFF button -->
+      <button id="toggleService" class="btn-small" aria-pressed="false">Stop Data</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <!-- Gauge -->
+    <section class="card card-gauge" aria-label="CPU Usage">
+      <h2>CPU Usage</h2>
+      <canvas id="cpuGauge" width="240" height="240" aria-label="CPU gauge"></canvas>
+      <div class="gauge-caption" id="cpuCaption">0%</div>
+    </section>
+
+    <!-- Throughput chart -->
+    <section class="card card-chart" aria-label="Throughput">
+      <h2>Throughput (req/s)</h2>
+      <canvas id="throughputChart" height="180" aria-label="Throughput chart"></canvas>
+    </section>
+
+    <!-- Process list -->
+    <section class="card card-table" aria-label="Process list">
+      <h2>Processes</h2>
+      <table id="processTable" aria-label="Process table">
+        <thead>
+          <tr><th>Process</th><th>CPU%</th><th>MEM</th><th>Status</th></tr>
+        </thead>
+        <tbody id="processBody"></tbody>
+      </table>
+    </section>
+
+    <!-- Alerts -->
+    <section class="card card-alerts" aria-label="Alerts">
+      <h2>Alerts</h2>
+      <ul id="alertsList" class="alerts-list"></ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>Last update: <span id="lastUpdate">—</span></div>
+    <div>Theme: <span id="themeName">Light</span></div>
+  </footer>
+
+  <script src="dataService.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
