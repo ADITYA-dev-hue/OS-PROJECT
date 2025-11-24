@@ -16,7 +16,7 @@ Live demo files
 Quick start
 1. Open the dashboard in your browser:
    - Double-click [OS GITHUB.HTML/index.html](OS GITHUB.HTML/index.html), or
-   - Serve the folder and open http://localhost:8000 (example: `python -m http.server`).
+   - Serve the folder and open https://aditya-dev-hue.github.io/OS-PROJECT/ (example: `python -m http.server`).
 2. The page uses an in-browser mock backend (`dataService`) to push updates. Toggle data flow with the "Stop Data" button.
 
 Developer notes
