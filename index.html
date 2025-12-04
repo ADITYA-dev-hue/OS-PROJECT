@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Real-Time Process Monitoring — Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* small inline helpers for an immersive home screen */
+    :root { --hero-gap: 28px; }
+    body { margin:0; min-height:100vh; display:flex; flex-direction:column; background:var(--bg); color:var(--text); font-family:Inter, "Segoe UI", Arial, sans-serif; }
+    .header-compact { display:flex; justify-content:space-between; align-items:center; padding:14px 22px; gap:12px; }
+    .brand { display:flex; gap:12px; align-items:center; }
+    .hero { display:grid; grid-template-columns: 1fr 520px 360px; gap:var(--hero-gap); padding:28px; align-items:start; width:100%; box-sizing:border-box; }
+    .card { background:var(--card-bg); box-shadow:0 8px 30px var(--card-shadow); border-radius:12px; padding:16px; }
+    .stat-row { display:flex; gap:12px; align-items:center; margin-top:12px; }
+    .stat { flex:1; background:rgba(0,0,0,0.03); border-radius:10px; padding:10px; text-align:center; }
+    .btn-card { display:inline-block; padding:8px 12px; border-radius:10px; text-decoration:none; color:var(--white); background:var(--accent); font-weight:600; }
+    .right-col canvas, aside canvas { width:100%; height:auto; display:block; }
+    @media (max-width:1200px){ .hero { grid-template-columns: 1fr 380px; } .hero .right-col { display:none; } }
+    @media (max-width:760px){ .hero { grid-template-columns:1fr; padding:18px; } }
+  </style>
+</head>
+<body>
+  <header class="header-compact">
+    <div class="brand">
+      <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#60a5fa,#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">RT</div>
+      <div>
+        <div style="font-size:15px;font-weight:700">Real-Time Process Monitor</div>
+        <div style="font-size:12px;color:var(--muted)">Dashboard</div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px">
+      <div id="clock" style="font-weight:600;color:var(--muted)"></div>
+      <button id="themeToggle" class="btn-small" aria-pressed="false">Dark Mode</button>
+      <button id="activateDevice" class="btn-small">Activate Device</button>
+      <span id="deviceStatus" style="font-size:12px;color:var(--muted);margin-left:6px">Device: idle</span>
+      <a class="btn-small" href="cpu.html">CPU View</a>
+      <a class="btn-small" href="system.html">System View</a>
+    </div>
+  </header>
+
+  <main class="hero" role="main" aria-labelledby="dashboardTitle">
+    <section class="card" aria-labelledby="dashboardTitle" style="min-height:420px;">
+      <h1 id="dashboardTitle" style="margin:0;font-size:20px">Dashboard</h1>
+      <p style="margin:6px 0 12px 0;color:var(--muted)">Live overview — click "Activate Device" to connect your data source.</p>
+
+      <div class="stat-row" role="region" aria-label="quick stats">
+        <div class="stat">
+          <div style="font-size:12px;color:var(--muted)">CPU Usage</div>
+          <div id="cpuPercent" style="font-size:20px;font-weight:700">—%</div>
+        </div>
+        <div class="stat">
+          <div style="font-size:12px;color:var(--muted)">GPU Usage</div>
+          <div id="gpuPercent" style="font-size:20px;font-weight:700">—%</div>
+        </div>
+        <div class="stat">
+          <div style="font-size:12px;color:var(--muted)">Memory</div>
+          <div id="memPercent" style="font-size:20px;font-weight:700">—%</div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;display:flex;gap:12px;align-items:center">
+        <a class="btn-card" href="cpu.html">Open CPU Panel</a>
+        <a class="btn-card" href="system.html" style="background:var(--green)">Open System Panel</a>
+      </div>
+
+      <div style="margin-top:18px">
+        <h3 style="margin:6px 0;color:var(--muted);font-size:13px">Recent Alerts</h3>
+        <ul id="alerts" style="margin:6px 0 0 18px;color:var(--muted);font-size:13px">
+          <li>No alerts — all systems normal</li>
+        </ul>
+      </div>
+    </section>
+
+    <aside class="card" style="display:flex;flex-direction:column;gap:12px;min-height:420px;">
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div style="flex:1;">
+          <canvas id="cpuGauge" width="300" height="300" aria-label="CPU gauge"></canvas>
+        </div>
+        <div style="width:140px;text-align:center;">
+          <div style="font-size:12px;color:var(--muted)">Throughput</div>
+          <div id="throughput" style="font-weight:700;font-size:20px;margin-top:6px">— req/s</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:10px">Last: <span id="lastUpdateSmall">—</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <canvas id="miniCpu" height="60" style="flex:1;"></canvas>
+        <canvas id="miniMem" height="60" style="flex:1;"></canvas>
+      </div>
+    </aside>
+
+    <section class="card right-col" style="min-height:420px;">
+      <h3 style="margin:0 0 8px 0">Live System Plot</h3>
+      <canvas id="systemPlotSmall" height="140" aria-label="small system plot" style="width:100%;height:140px;margin-bottom:10px"></canvas>
+
+      <h3 style="margin:6px 0 8px 0">Heat Detector</h3>
+      <canvas id="heatPlotSmall" height="140" aria-label="heat detector" style="width:100%;height:140px"></canvas>
+
+      <div style="margin-top:12px;font-size:13px;color:var(--muted)">
+        Tip: open detailed views for full graphs and process list.
+      </div>
+    </section>
+  </main>
+
+  <script src="theme.js"></script>
+  <script src="INDEX.JS"></script>
+</body>
+</html>

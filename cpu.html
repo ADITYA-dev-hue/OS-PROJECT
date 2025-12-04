@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CPU Usage & Throughput</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="brand"><span class="brand-icon">🖥️</span><span class="brand-name">CPU & Throughput</span></div>
+    <div class="status-wrap">
+      <div class="status" id="statusChip" aria-live="polite">Status: Connecting...</div>
+      <button id="themeToggle" class="btn-small">Dark Mode</button>
+      <button id="toggleService" class="btn-small">Stop Data</button>
+      <a class="btn-small" href="index.html">Home</a>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card card-gauge">
+      <h2>CPU Usage</h2>
+      <canvas id="cpuGauge" width="240" height="240" aria-label="CPU gauge"></canvas>
+      <div class="gauge-caption" id="cpuCaption">0%</div>
+    </section>
+
+    <section class="card card-chart">
+      <h2>Throughput (req/s)</h2>
+      <div style="position:relative">
+        <canvas id="throughputChart" height="180" aria-label="Throughput chart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Last update: <span id="lastUpdate">—</span>
+  </footer>
+
+  <script src="dataService.js"></script>
+  <script src="script_cpu.js"></script>
+</body>
+</html>
