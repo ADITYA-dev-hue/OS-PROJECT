@@ -17,6 +17,7 @@
     btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
   }
 
+  
   function currentThemeFallback(){
     const saved = localStorage.getItem(KEY);
     if (saved) return saved;
