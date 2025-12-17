@@ -39,7 +39,8 @@
       } else {
         // simulator — REPLACED: generate multiple random processes with varied statuses
         const cpu = Math.max(2, Math.min(98, 40 + Math.sin(t/5)*25 + Math.random()*10));
-        const throughput = Math.max(0, Math.round(50 + Math.sin(t/3)*25 + Math.random()*10));
+        // simulate higher throughput values to match dashboard home demo (200+ req/s)
+        const throughput = Math.max(0, Math.round(200 + Math.sin(t/3)*120 + Math.random()*20));
         const memTotal = 16000;
         const memUsed = Math.round((30 + Math.abs(Math.sin(t/7))*40 + Math.random()*10)/100 * memTotal);
         const gpuUtil = Math.round(10 + Math.abs(Math.sin(t/4))*60 + Math.random()*10);
