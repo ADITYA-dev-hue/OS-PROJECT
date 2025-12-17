@@ -276,12 +276,10 @@
       });
     }
 
-    // connectivity/theme/service handlers (shared simple logic)
+    // connectivity/service handlers (shared simple logic)
     const statusChip = $('#statusChip');
-    const themeToggle = $('#themeToggle');
     let serviceRunning = true;
     function setStatus(online){ statusChip.classList.remove('online','offline','stopped'); statusChip.classList.add(online ? 'online' : 'offline'); statusChip.textContent = `Status: ${online ? 'Online' : 'Offline'}`; setLastUpdate(); }
-    themeToggle?.addEventListener('click', ()=>{ const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', t==='dark'?'dark':''); themeToggle.textContent = t==='dark'?'Light Mode':'Dark Mode'; });
     $('#toggleService')?.addEventListener('click', ()=>{ serviceRunning = !serviceRunning; if(!serviceRunning){ dataService.stop(); statusChip.classList.remove('online','offline'); statusChip.classList.add('stopped'); statusChip.textContent='Status: Stopped'; $('#toggleService').textContent='Start Data'; } else { dataService.start(); $('#toggleService').textContent='Stop Data'; statusChip.textContent='Status: Connecting...'; } });
 
     // subscribe to dataService
